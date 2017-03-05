@@ -1,0 +1,7 @@
+rpi.c:368:12:power_on_module	80	static
+rpi.c:231:5:dram_init	72	static
+rpi.c:279:15:board_get_usable_ram_top	0	static
+rpi.c:355:5:misc_init_r	112	static
+rpi.c:485:5:board_init	80	static
+rpi.c:498:5:board_mmc_init	72	static
+rpi.c:519:5:ft_board_setup	16	static

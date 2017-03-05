@@ -1,0 +1,44 @@
+
+1 . define SYS_VENDOR with new board name in arch/arm/machine_type/Kconfig
+
+	edit "arch/arm/mach-bcm283x/Kconfig" with new board file 
+	name added in board file.
+
+2 . Add board specific file in .board/
+	board/raspberrypi/rpi
+
+3 . add header file in include/configs/
+
+	include/configs/rpi_new.h
+
+4 . compile and fix other coding error if any. 
+
+
+
+
+Execution of the boot 
+
+1 . for "arch/arm/cpu/arm1176/start.S"  
+	1. save_boot_params calls from boards 
+	"board/_raspberrypi/rpi/lowlevel_init.S".
+
+	2. start.S calls "lowlevel_init" from  
+	"board/_raspberrypi/rpi/lowlevel_init.S".
+	
+	3. start.S calls "_main" from 
+	"arch/arm/lib/crt0.S"
+		
+		1 . in _main,it calls board_init_f from 
+		common/board_f.c
+		
+		whrer initcall_run_list uses "init_sequence_f"
+		init_sequence_f => here only init list of 
+		function pointer is defined.
+	
+		2 . in _main,it calls board_init_r from 
+		"common/board_r.c". 
+
+		whrer initcall_run_list uses "init_sequence_r"
+		init_sequence_r => here only init list of 
+		reset function pointer is defined.
+2 . 

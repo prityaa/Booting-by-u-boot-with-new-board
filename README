@@ -4,6 +4,19 @@
 	edit "arch/arm/mach-bcm283x/Kconfig" with new board file 
 	name added in board file.
 
+	e.g. =>
+	config SYS_BOARD
+	        default "rpi"
+
+	config SYS_VENDOR
+	        default "raspberrypi_new"
+
+	config SYS_SOC
+	        default "bcm283x"
+
+	config SYS_CONFIG_NAME
+	        default "rpi"
+
 2 . Add board specific file in .board/
 	board/raspberrypi/rpi
 
@@ -12,8 +25,6 @@
 	include/configs/rpi_new.h
 
 4 . compile and fix other coding error if any. 
-
-
 
 
 Execution of the boot 
@@ -41,4 +52,23 @@ Execution of the boot
 		whrer initcall_run_list uses "init_sequence_r"
 		init_sequence_r => here only init list of 
 		reset function pointer is defined.
-2 . 
+
+zed_board u-boot code flow (backward trace)
+
+1 . u-boot commmand line 
+	main_loop => common/main.c
+
+2 . main_loop is called from  
+	run_main_loop => common/board_r.c
+
+3 . initcall_run_list  => common/board_r.c
+	init_sequence_r =
+
+4 . initcall_run_list is called by 
+	board_init_r => common/board_r.c
+
+5 . board_init_r is called from 
+	_main => arch/arm/lib/crt0.S
+
+6 . _main is called from 
+	arch/arm/cpu/(PROCESSOR_TYPE)/Start.S

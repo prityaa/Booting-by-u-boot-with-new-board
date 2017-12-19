@@ -1,0 +1,24 @@
+
+Codeflow :
+========
+	1 . HOST :
+	do_usb	cmd/usb.c
+	do_usb_start	
+	usb_init	common/usb.c
+	usb_low_level_init	drivers/usb/host/ehci_hcd.c
+	ehci_hcd_init	drivers/usb/host/ehci_zynq.c
+	
+	2 . GADGET : 
+	do_usb_mass_storage	cmd/usb_mass_storage.c
+	g_dnl_register	drivers/usb/gadget/g_dnl.c
+	usb_composite_register	drivers/usb/gadget/composite.c
+	usb_gadget_register_driver	drivers/usb/gadget/ci_udc.c
+	usb_lowlevel_init	drivers/usb/host/ehci-hcd.c
+
+
+Test on Zed board
+=================
+	1 . set jumpers for sdboot
+	2 . usb start on u-boot console
+	3 . usb tree - after inserting sd with type-a to female usb cable.
+	4 . read file fatload usb 1:1 0x10000000 BOOT.BIN

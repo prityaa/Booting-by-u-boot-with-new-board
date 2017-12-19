@@ -1,0 +1,35 @@
+1 . enable usb support driver
+
+				       --- USB support                                                                                          │ │  
+  │ │                                  [ ]   Enable driver model for USB                                                                        │ │  
+  │ │                                        *** USB Host Controller Drivers ***                                                                │ │  
+  │ │                                  [ ]   xHCI HCD (USB 3.0) support                                                                         │ │  
+  │ │                                  [*]   EHCI HCD (USB 2.0) support                                                                         │ │  
+  │ │                                  [*]   Support for Xilinx Zynq on-chip EHCI USB controller                                                │ │  
+  │ │                                  [ ]   DesignWare USB3 DRD Core Support                                                                   │ │  
+  │ │                                        *** MUSB Controller Driver ***                                                                     │ │  
+  │ │                                  [ ]   MUSB host mode support                                                                             │ │  
+  │ │                                  [ ]   MUSB gadget mode support                                                                           │ │  
+  │ │                                        *** ULPI drivers ***                                                                               │ │  
+  │ │                                  [*]   ULPI Viewport type (Generic ULPI Viewport)  --->                                                   │ │  
+  │ │                                  [*]   ULPI support                                                                                       │ │  
+  │ │                                        *** USB peripherals ***                                                                            │ │  
+  │ │                                  [ ]   USB Mass Storage support                                                                           │ │  
+  │ │                                  [ ]   USB Keyboard support                                                                               │ │  
+  │ │                                  [*]   USB Gadget Support  ---> 
+
+2 . enable ums command in u-boot
+	define CONFIG_USB_FUNCTION_MASS_STORAGE in 
+	include/configs/zynq-common.h
+
+3 . export CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm
+
+4 . make 
+
+5 . copy u-boot to <petalinux_proj>/image/linux/
+
+6 . petalinux-package --boot --fsbl images/linux/zynq_fsbl.elf \
+	--fpga project-spec/hw-description/startup_wrapper.bit --u-boot \
+	--force
+
+7 . copy <petalinux_proj>/BOOT.BIN to sdcard and boot the board.

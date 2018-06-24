@@ -1,7 +1,7 @@
 
 1 . define SYS_VENDOR with new board name in arch/arm/machine_type/Kconfig
 
-	edit "arch/arm/mach-bcm283x/Kconfig" with new board file 
+	edit "arch/arm/mach-bcm283x/Kconfig" with new board file
 	name added in board file.
 
 	e.g. =>
@@ -24,51 +24,58 @@
 
 	include/configs/rpi_new.h
 
-4 . compile and fix other coding error if any. 
+4 . compile and fix other coding error if any.
 
 
-Execution of the boot 
+Execution of the boot
 
-1 . for "arch/arm/cpu/arm1176/start.S"  
-	1. save_boot_params calls from boards 
+1 . for "arch/arm/cpu/arm1176/start.S"
+	1. save_boot_params calls from boards
 	"board/_raspberrypi/rpi/lowlevel_init.S".
 
-	2. start.S calls "lowlevel_init" from  
+	2. start.S calls "lowlevel_init" from
 	"board/_raspberrypi/rpi/lowlevel_init.S".
-	
-	3. start.S calls "_main" from 
+
+	3. start.S calls "_main" from
 	"arch/arm/lib/crt0.S"
-		
-		1 . in _main,it calls board_init_f from 
+
+		1 . in _main,it calls board_init_f from
 		common/board_f.c
-		
+
 		whrer initcall_run_list uses "init_sequence_f"
-		init_sequence_f => here only init list of 
+		init_sequence_f => here only init list of
 		function pointer is defined.
-	
-		2 . in _main,it calls board_init_r from 
-		"common/board_r.c". 
+
+		2 . in _main,it calls board_init_r from
+		"common/board_r.c".
 
 		whrer initcall_run_list uses "init_sequence_r"
-		init_sequence_r => here only init list of 
+		init_sequence_r => here only init list of
 		reset function pointer is defined.
 
-zed_board u-boot code flow (backward trace)
+		3 . here it calls main_loop => run_main_loop from
 
-1 . u-boot commmand line 
+zed_board u-boot code flow (backward trace)
+1 . main_loop calls autoboot_command and control goes to
+	abortboot where it waits for bootdelay and boots default command.
+	common/autoboot.c
+
+2 . u-boot commmand line
 	main_loop => common/main.c
 
-2 . main_loop is called from  
+3 . main_loop is called from
 	run_main_loop => common/board_r.c
 
-3 . initcall_run_list  => common/board_r.c
+4 . initcall_run_list  => common/board_r.c
 	init_sequence_r =
 
-4 . initcall_run_list is called by 
+5 . initcall_run_list is called by
 	board_init_r => common/board_r.c
 
-5 . board_init_r is called from 
+6 . _main calls board_init_f in arch/arm/lib/crt0.S
+
+7 . board_init_r is called from
 	_main => arch/arm/lib/crt0.S
 
-6 . _main is called from 
+8 . _main is called from
 	arch/arm/cpu/(PROCESSOR_TYPE)/Start.S
